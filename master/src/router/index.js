@@ -1,17 +1,17 @@
 import { createRouter, createWebHistory } from "vue-router";
-// import HomeView from "../views/HomeView.vue";
+import HomeView from "../views/HomeView.vue";
 
 const routes = [
   {
     path: "/",
     name: "home",
-    component: () => import(/* webpackChunkName: "about" */ '../views/HomeView.vue')
+    component: HomeView,
   },
 ];
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
   routes,
+  history: createWebHistory(),
 });
 
 // 全局前置守卫
@@ -30,23 +30,65 @@ router.beforeEach((to, from, next) => {
   }
 });
 
-// 模拟动态路由加载函数
+// 动态路由加载函数
 function loadDynamicRoutes() {
   return new Promise((resolve) => {
-    // 模拟异步加载动态路由的过程
-    setTimeout(() => {
-      router.addRoute({
-        path: "/about",
-        name: "about",
-        component: () =>
-          // 使用default属性来获取导入的组件对象
-          import("../views/AboutView.vue").default,
-      });
-      // 把hasLoadedDynamicRoutes变量的值改成true，表示已经加载过动态路由了
-      hasLoadedDynamicRoutes = true;
+    // 发送请求到后端获取菜单数据
+    let test = {
+      path: "/about",
+      name: "about",
+      component: "AboutView.vue",
+    };
+    let testList=[];
+    testList.push(test);
+    const routes = menuToRoutes(testList);
+    for (let route of routes) {
+      router.addRoute(route);
+    }
+    // 把hasLoadedDynamicRoutes变量的值改成true，表示已经加载过动态路由了
+    hasLoadedDynamicRoutes = true;
 
-      resolve();
-    }, 200);
+    resolve();
+    // axios.get("/api/menus").then((response) => {
+    //   // 把菜单数据转换成路由表
+    //   const routes = menuToRoutes(response.data);
+    //   // 遍历路由表，添加到路由器里面
+    //   for (let route of routes) {
+    //     router.addRoute(route);
+    //   }
+    //   // 把hasLoadedDynamicRoutes变量的值改成true，表示已经加载过动态路由了
+    //   hasLoadedDynamicRoutes = true;
+
+    //   resolve();
+    // });
   });
 }
+
+// 菜单转换成路由表的函数
+function menuToRoutes(menus) {
+  let callback = (component) => import("@/views/" + component);
+  // 创建一个空数组用来存放路由对象
+  const routes = [];
+  // 遍历menus数组
+  for (let menu of menus) {
+    // 创建一个路由对象，把menu里面的path和name属性复制过来
+    const route = {
+      path: menu.path,
+      name: menu.name,
+    };
+    // 如果menu里面有component属性，就用回调函数来返回一个动态导入的Promise，并赋值给route的component属性
+    if (menu.component) {
+      route.component = callback(menu.component);
+    }
+    // 如果menu里面有children属性，就递归调用menuToRoutes函数来生成子路由，并赋值给route的children属性
+    if (menu.children) {
+      route.children = menuToRoutes(menu.children);
+    }
+    // 把路由对象添加到数组里面
+    routes.push(route);
+  }
+  // 返回路由数组
+  return routes;
+}
+
 export default router;
