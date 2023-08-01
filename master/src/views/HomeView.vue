@@ -1,5 +1,6 @@
 <template>
   <div class="home">
+    <router-link to="/about">About</router-link>
     <img alt="Vue logo" src="../assets/logo.png">
     <HelloWorld msg="Welcome to Your Vue.js App"/>
   </div>
@@ -13,6 +14,9 @@ export default {
   name: 'HomeView',
   components: {
     HelloWorld
+  },
+  created() {
+    console.log('AboutView created');
   }
 }
 </script>

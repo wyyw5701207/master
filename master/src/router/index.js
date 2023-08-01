@@ -2,16 +2,11 @@ import { createRouter, createWebHistory } from "vue-router";
 // import HomeView from "../views/HomeView.vue";
 
 const routes = [
-  // {
-  //   path: "/",
-  //   name: "home",
-  //   component: HomeView,
-  // },
-  // {
-  //   path: '/about',
-  //   name: 'about',
-  //   component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
-  // }
+  {
+    path: "/",
+    name: "home",
+    component: () => import(/* webpackChunkName: "about" */ '../views/HomeView.vue')
+  },
 ];
 
 const router = createRouter({
@@ -41,19 +36,11 @@ function loadDynamicRoutes() {
     // 模拟异步加载动态路由的过程
     setTimeout(() => {
       router.addRoute({
-        path: "/",
+        path: "/about",
         name: "about",
         component: () =>
           // 使用default属性来获取导入的组件对象
           import("../views/AboutView.vue").default,
-      });
-
-      router.addRoute({
-        path: "/home",
-        name: "home",
-        component: async () =>
-          // 使用async/await语法来等待组件的加载
-          await import("../views/HomeView.vue"),
       });
       // 把hasLoadedDynamicRoutes变量的值改成true，表示已经加载过动态路由了
       hasLoadedDynamicRoutes = true;
