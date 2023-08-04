@@ -9,10 +9,15 @@ import lombok.Data;
  */
 @Data
 public class SuccessResult extends ResponseResult {
-    public SuccessResult(){
+    public SuccessResult() {
         super(Boolean.TRUE, BaseConstants.SUCCESS_CODE, BaseConstants.SUCCESS_MESSAGE, null);
     }
-    public SuccessResult(String message,Object data){
+
+    public SuccessResult(String message, Object data) {
         super(Boolean.TRUE, BaseConstants.SUCCESS_CODE, message, data);
+    }
+
+    public SuccessResult(Object data) {
+        super(Boolean.TRUE, BaseConstants.SUCCESS_CODE, BaseConstants.SUCCESS_MESSAGE, data);
     }
 }

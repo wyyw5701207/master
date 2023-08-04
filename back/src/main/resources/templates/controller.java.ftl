@@ -42,29 +42,29 @@ class ${table.controllerName}<#if superControllerClass??>:${superControllerClass
     @PostMapping()
     public ResponseResult add(@RequestBody ${entity}Request ${entity?uncap_first}Request){
         ${(table.serviceName?substring(1))?uncap_first}.add(${entity?uncap_first}Request);
-        return new ResponseResult();
+        return new SuccessResult();
     }
 
     @DeleteMapping()
     public ResponseResult delete(@RequestBody ${entity}Request ${entity?uncap_first}Request){
         ${(table.serviceName?substring(1))?uncap_first}.delete(${entity?uncap_first}Request);
-        return new ResponseResult();
+        return new SuccessResult();
     }
 
     @PutMapping()
     public ResponseResult update(@RequestBody ${entity}Request ${entity?uncap_first}Request){
         ${(table.serviceName?substring(1))?uncap_first}.updateData(${entity?uncap_first}Request);
-        return new ResponseResult();
+        return new SuccessResult();
     }
 
     @GetMapping()
     public ResponseResult findPage(@RequestBody ${entity}Request ${entity?uncap_first}Request){
-        return new ResponseResult(${(table.serviceName?substring(1))?uncap_first}.findPage(${entity?uncap_first}Request));
+        return new SuccessResult(${(table.serviceName?substring(1))?uncap_first}.findPage(${entity?uncap_first}Request));
     }
 
     @GetMapping()
     public ResponseResult findById(@RequestBody ${entity}Request ${entity?uncap_first}Request){
-        return new ResponseResult(${(table.serviceName?substring(1))?uncap_first}.findById(${entity?uncap_first}Request));
+        return new SuccessResult(${(table.serviceName?substring(1))?uncap_first}.findById(${entity?uncap_first}Request));
     }
 
 }
